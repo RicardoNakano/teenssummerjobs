@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 .env
+src/AdBanner.tsx
+src/_AdBanner.tsx_
