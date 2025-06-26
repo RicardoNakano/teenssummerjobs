@@ -69,43 +69,82 @@ export default function ServiceList({ type }: ServiceListProps) {
   }, [filtered]);
 
   return (
-    <div style={{ marginBottom: 32 }}>
-      <h2>{type === 'ofertas' ? 'Service Offers' : 'Service Requests'}</h2>
+    <div style={{ marginBottom: '40px', padding: '20px', border: '1px solid #e0e0e0', borderRadius: '8px', backgroundColor: '#f9f9f9' }}>
+      <h2 style={{ fontSize: '1.8em', color: '#333', marginBottom: '20px', borderBottom: '2px solid #eee', paddingBottom: '10px' }}>
+        {type === 'ofertas' ? 'Service Offers' : 'Service Requests'}
+      </h2>
       <input
         type="text"
-        placeholder="Filter by service..."
+        placeholder="Filter by service name..."
         value={filter}
         onChange={e => setFilter(e.target.value)}
-        style={{ marginBottom: 12, width: '100%', padding: 4 }}
+        style={{ 
+          marginBottom: '25px', 
+          width: 'calc(100% - 22px)', 
+          padding: '12px 10px', 
+          fontSize: '1em', 
+          border: '1px solid #ccc', 
+          borderRadius: '5px' 
+        }}
       />
-      {filtered.length === 0 && <p>No records found.</p>}
-      <ul>
+      {filtered.length === 0 && <p style={{ fontSize: '1.1em', color: '#555' }}>No records found.</p>}
+      <ul style={{ listStyleType: 'none', padding: 0 }}>
         {filtered.map((item) => (
-          <li key={item.id} style={{ marginBottom: 12, border: '1px solid #ccc', padding: 8, borderRadius: 6 }}>
-            <b>{item.servico}</b> — {item.data} {item.hora}<br />
-            Value: ${item.valor} <br />
-            Address: {item.endereco}<br />
-            {item.userName && user && (
-              <span>Contact: <b>
-                <Link to={`/profile/${item.userId}`} style={{ color: '#4af', textDecoration: 'underline' }}>
-                  {item.userName}
-                </Link>
-              </b>{item.userPhone ? ` | Phone: ${item.userPhone}` : ''}
-              {item.userId && userRatings[item.userId as string] !== undefined && (
-                <span style={{ marginLeft: 8 }}>
-                  {[1,2,3,4,5].map(i => (
-                    <span key={i} style={{ color: i <= Math.round(userRatings[item.userId as string]) ? '#FFD700' : '#ccc', fontSize: 16 }}>★</span>
-                  ))}
-                  <span style={{ fontSize: 12, color: '#888', marginLeft: 2 }}>
-                    {userRatings[item.userId as string].toFixed(1)}
-                  </span>
-                </span>
+          <li 
+            key={item.id} 
+            style={{
+              marginBottom: '20px', 
+              border: '1px solid #ddd', 
+              padding: '18px', 
+              borderRadius: '8px', 
+              backgroundColor: '#fff',
+              boxShadow: '0 2px 5px rgba(0,0,0,0.05)'
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div>
+                <h3 style={{ fontSize: '1.4em', color: '#2c3e50', marginBottom: '8px', marginTop: 0 }}>{item.servico}</h3>
+                <p style={{ margin: '4px 0', fontSize: '1em', color: '#555' }}>Date: {item.data} at {item.hora}</p>
+                <p style={{ margin: '4px 0', fontSize: '1em', color: '#555' }}>Value: <strong>${item.valor}</strong></p>
+                <p style={{ margin: '4px 0', fontSize: '1em', color: '#555' }}>Address: {item.endereco}</p>
+                {item.userName && user && (
+                  <div style={{ marginTop: '12px', fontSize: '1em' }}>
+                    Contact: 
+                    <Link to={`/profile/${item.userId}`} style={{ color: '#007bff', textDecoration: 'underline', fontWeight: 'bold' }}>
+                      {item.userName}
+                    </Link>
+                    {item.userPhone ? ` | Phone: ${item.userPhone}` : ''}
+                    {item.userId && userRatings[item.userId as string] !== undefined && (
+                      <span style={{ marginLeft: '12px', display: 'inline-flex', alignItems: 'center' }}>
+                        {[1,2,3,4,5].map(i => (
+                          <span key={i} style={{ color: i <= Math.round(userRatings[item.userId as string]) ? '#FFD700' : '#ccc', fontSize: '1.3em' }}>★</span>
+                        ))}
+                        <span style={{ fontSize: '0.9em', color: '#777', marginLeft: '5px' }}>
+                          ({userRatings[item.userId as string].toFixed(1)})
+                        </span>
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+              {user && item.userId === user.uid && (
+                <button 
+                  style={{ 
+                    padding: '8px 15px', 
+                    fontSize: '0.95em', 
+                    color: 'white', 
+                    backgroundColor: '#e74c3c', 
+                    border: 'none', 
+                    borderRadius: '5px', 
+                    cursor: 'pointer', 
+                    marginLeft: '15px'
+                  }} 
+                  onClick={() => handleDelete(item.id)}
+                >
+                  Delete
+                </button>
               )}
-              </span>
-            )}
-            {user && item.userId === user.uid && (
-              <button style={{ float: 'right', color: 'red' }} onClick={() => handleDelete(item.id)}>Delete</button>
-            )}
+            </div>
           </li>
         ))}
       </ul>

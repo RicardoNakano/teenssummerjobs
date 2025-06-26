@@ -28,19 +28,20 @@ export default function ProfileConfig({ onSaved }: { onSaved?: () => void }) {
     if (!user) {
       navigate('/login');
     } else {
-      // Always fetch the latest name, phone, and videoUrl from Firestore
       getDoc(doc(db, 'users', user.uid)).then((snap) => {
         if (snap.exists()) {
           const data = snap.data();
           setPhone(data.phone || '');
           setVideoUrl(data.videoUrl || '');
-          setDisplayName((data.displayName !== undefined && data.displayName !== null) ? String(data.displayName) : '');
+          // Prioritize displayName from Firestore, then auth, then empty string
+          setDisplayName(data.displayName || user.displayName || '');
         } else {
-          setDisplayName('');
+          // If no Firestore doc, use auth display name or empty
+          setDisplayName(user.displayName || '');
           setVideoUrl('');
         }
       }).catch(() => {
-        setDisplayName('');
+        setDisplayName(user.displayName || '');
         setVideoUrl('');
       });
     }
@@ -48,41 +49,68 @@ export default function ProfileConfig({ onSaved }: { onSaved?: () => void }) {
 
   const handleSave = async () => {
     setError('');
+    setSuccess(false); // Reset success message before attempting to save
     try {
       await setDoc(doc(db, 'users', user!.uid), { displayName, phone, videoUrl }, { merge: true });
       await updateProfile(user as User, { displayName });
       setSuccess(true);
       if (onSaved) onSaved();
     } catch (err) {
-      setError('Error saving.');
+      setError('Error saving profile. Please try again.');
     }
   };
 
   return (
-    <div style={{ border: '1px solid #ccc', padding: 24, borderRadius: 8, marginBottom: 24, maxWidth: 400, marginLeft: 'auto', marginRight: 'auto', background: '#222', color: '#fff' }}>
-      <h2 style={{ textAlign: 'center', marginBottom: 24 }}>Profile Settings</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <label>
+    <div style={{ border: '1px solid #ccc', padding: '25px', borderRadius: '8px', marginBottom: '30px', maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto', backgroundColor: '#f9f9f9', color: '#333' }}>
+      <h2 style={{ textAlign: 'center', marginBottom: '30px', fontSize: '1.8em', color: '#2c3e50' }}>Profile Settings</h2>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <label style={{ fontSize: '1.1em' }}>
           Display name:
-          <input value={displayName} onChange={e => setDisplayName(e.target.value)} placeholder="Name" style={{ width: '100%', marginTop: 4 }} />
+          <input 
+            value={displayName} 
+            onChange={e => setDisplayName(e.target.value)} 
+            placeholder="Your Name" 
+            style={{ width: 'calc(100% - 22px)', marginTop: '8px', padding: '12px 10px', fontSize: '1em', borderRadius: '5px', border: '1px solid #ccc' }} 
+          />
         </label>
-        <label>
-          Presentation video URL:
-          <input value={videoUrl} onChange={e => setVideoUrl(e.target.value)} placeholder="https://..." style={{ width: '100%', marginTop: 4 }} />
+        <label style={{ fontSize: '1.1em' }}>
+          Presentation video URL (optional):
+          <input 
+            value={videoUrl} 
+            onChange={e => setVideoUrl(e.target.value)} 
+            placeholder="https://youtube.com/watch?v=..." 
+            style={{ width: 'calc(100% - 22px)', marginTop: '8px', padding: '12px 10px', fontSize: '1em', borderRadius: '5px', border: '1px solid #ccc' }} 
+          />
         </label>
-        <label>
-          Phone (+1...):
-          <input value={phone} placeholder="+15551234567" disabled style={{ width: '100%', marginTop: 4 }} />
+        <label style={{ fontSize: '1.1em' }}>
+          Phone:
+          <input 
+            value={phone} 
+            placeholder="+15551234567" 
+            disabled 
+            style={{ width: 'calc(100% - 22px)', marginTop: '8px', padding: '12px 10px', fontSize: '1em', borderRadius: '5px', border: '1px solid #ccc', backgroundColor: '#e9ecef' }} 
+          />
         </label>
-        <button onClick={() => setShowPhoneRegister(v => !v)} style={{ width: '100%' }}>Register/Change Phone</button>
-        <button onClick={handleSave} style={{ width: '100%', fontWeight: 'bold', marginTop: 8 }}>Save Profile</button>
+        <button 
+          onClick={() => setShowPhoneRegister(v => !v)} 
+          style={{ width: '100%', padding: '12px', fontSize: '1.1em', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+        >
+          {showPhoneRegister ? 'Cancel Phone Registration' : 'Register / Change Phone'}
+        </button>
+        <button 
+          onClick={handleSave} 
+          style={{ width: '100%', padding: '14px', fontSize: '1.2em', fontWeight: 'bold', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', marginTop: '10px' }}
+        >
+          Save Profile
+        </button>
+        {success && <span style={{ color: '#28a745', textAlign: 'center', fontSize: '1.1em', fontWeight: 'bold', marginTop: '10px' }}>Profile saved successfully!</span>}
+        {error && <span style={{ color: '#dc3545', textAlign: 'center', fontSize: '1.1em', fontWeight: 'bold', marginTop: '10px' }}>{error}</span>}
+        
         {showPhoneRegister && (
-          <div style={{ marginTop: 24 }}>
+          <div style={{ marginTop: '25px', borderTop: '1px solid #eee', paddingTop: '25px' }}>
             <PhoneRegisterPageInline onClose={() => setShowPhoneRegister(false)} />
           </div>
         )}
-        {success && <span style={{ color: 'lightgreen', marginLeft: 8 }}>Saved!</span>}
-        {error && <span style={{ color: 'red', marginLeft: 8 }}>{error}</span>}
       </div>
     </div>
   );
@@ -124,8 +152,8 @@ function PhoneRegisterPageInline({ onClose }: { onClose: () => void }) {
 
   const handleSendSMS = async () => {
     setError('');
-    if (!/^[+]{1}1\d{10}$/.test(phone)) {
-      setError('Use o formato +1 e 10 dígitos (ex: +15551234567)');
+    if (!/^\\+1\\d{10}$/.test(phone)) { // Corrected regex
+      setError('Please use +1 format and 10 digits (e.g., +15551234567)');
       return;
     }
     try {
@@ -172,25 +200,60 @@ function PhoneRegisterPageInline({ onClose }: { onClose: () => void }) {
   if (!user) return null;
 
   return (
-    <div style={{ maxWidth: 400, margin: '0 auto', border: '1px solid #ccc', padding: 24, borderRadius: 10 }}>
-      <h2>Register/Change Phone</h2>
-      <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="+15551234567" style={{ width: '100%', marginBottom: 8 }} />
-      <div id={recaptchaId}></div>
-      {smsValidation ? (
-        !smsSent ? (
-          <button onClick={handleSendSMS} disabled={!phone} style={{ width: '100%' }}>Send SMS</button>
+    <div style={{ maxWidth: '450px', margin: '0 auto', border: '1px solid #ddd', padding: '25px', borderRadius: '8px', backgroundColor: '#fff' }}>
+      <h3 style={{ textAlign: 'center', marginBottom: '25px', fontSize: '1.5em', color: '#2c3e50' }}>Register/Change Phone</h3>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+        <input 
+          value={phone} 
+          onChange={e => setPhone(e.target.value)} 
+          placeholder="+15551234567" 
+          style={{ width: 'calc(100% - 22px)', padding: '12px 10px', fontSize: '1em', borderRadius: '5px', border: '1px solid #ccc' }} 
+        />
+        <div id={recaptchaId}></div>
+        {smsValidation ? (
+          !smsSent ? (
+            <button 
+              onClick={handleSendSMS} 
+              disabled={!phone} 
+              style={{ width: '100%', padding: '12px', fontSize: '1.1em', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+            >
+              Send SMS
+            </button>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              <input 
+                value={smsCode} 
+                onChange={e => setSmsCode(e.target.value)} 
+                placeholder="SMS Code" 
+                style={{ width: 'calc(100% - 22px)', padding: '12px 10px', fontSize: '1em', borderRadius: '5px', border: '1px solid #ccc' }} 
+              />
+              <button 
+                onClick={handleVerifySMS} 
+                disabled={verifying} 
+                style={{ width: '100%', padding: '12px', fontSize: '1.1em', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+              >
+                {verifying ? 'Verifying...' : 'Verify Code'}
+              </button>
+            </div>
+          )
         ) : (
-          <div>
-            <input value={smsCode} onChange={e => setSmsCode(e.target.value)} placeholder="SMS Code" style={{ width: '100%', marginBottom: 8 }} />
-            <button onClick={handleVerifySMS} disabled={verifying} style={{ width: '100%' }}>Verify</button>
-          </div>
-        )
-      ) : (
-        <button onClick={handleSaveSemSms} disabled={!phone} style={{ width: '100%' }}>Save Phone (no SMS)</button>
-      )}
-      {success && <span style={{ color: 'green', marginLeft: 8 }}>Phone saved!</span>}
-      {error && <span style={{ color: 'red', marginLeft: 8 }}>{error}</span>}
-      <button onClick={onClose} style={{ marginTop: 16, width: '100%' }}>Cancel</button>
+          <button 
+            onClick={handleSaveSemSms} 
+            disabled={!phone} 
+            style={{ width: '100%', padding: '12px', fontSize: '1.1em', backgroundColor: '#5a6268', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+          >
+            Save Phone (No SMS Verification)
+          </button>
+        )}
+        {success && <span style={{ color: '#28a745', textAlign: 'center', fontSize: '1.1em', fontWeight: 'bold', marginTop: '10px' }}>Phone saved successfully!</span>}
+        {error && <span style={{ color: '#dc3545', textAlign: 'center', fontSize: '1.1em', fontWeight: 'bold', marginTop: '10px' }}>{error}</span>}
+        <button 
+          onClick={onClose} 
+          style={{ marginTop: '20px', width: '100%', padding: '10px', fontSize: '1em', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+        >
+          Cancel
+        </button>
+      </div>
     </div>
   );
 }

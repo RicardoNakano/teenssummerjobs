@@ -60,15 +60,79 @@ export default function ServiceForm({ type, onSaved }: ServiceFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: 24 }}>
-      <h2>{type === 'oferta' ? 'Offer Service' : 'Request Service'}</h2>
-      <input name="servico" placeholder="Service" value={form.servico} onChange={handleChange} required />
-      <input name="data" type="date" value={form.data} onChange={handleChange} required />
-      <input name="hora" type="time" value={form.hora} onChange={handleChange} required />
-      <input name="valor" type="number" placeholder="Value (USD)" value={form.valor} onChange={handleChange} required />
-      <input name="endereco" placeholder="Address" value={form.endereco} onChange={handleChange} required />
-      <button type="submit" disabled={loading}>{loading ? 'Saving...' : 'Save'}</button>
-      {success && <span style={{ color: 'green', marginLeft: 8 }}>Saved!</span>}
+    <form 
+      onSubmit={handleSubmit} 
+      style={{
+        marginBottom: '40px', 
+        padding: '25px', 
+        border: '1px solid #e0e0e0', 
+        borderRadius: '8px', 
+        backgroundColor: '#f9f9f9'
+      }}
+    >
+      <h2 style={{ fontSize: '1.8em', color: '#333', marginBottom: '25px', borderBottom: '2px solid #eee', paddingBottom: '10px' }}>
+        {type === 'oferta' ? 'Offer Service' : 'Request Service'}
+      </h2>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+        <input 
+          name="servico" 
+          placeholder="Service Name (e.g., Babysitting, Lawn Mowing)" 
+          value={form.servico} 
+          onChange={handleChange} 
+          required 
+          style={{ padding: '12px 10px', fontSize: '1em', border: '1px solid #ccc', borderRadius: '5px' }}
+        />
+        <input 
+          name="data" 
+          type="date" 
+          value={form.data} 
+          onChange={handleChange} 
+          required 
+          style={{ padding: '12px 10px', fontSize: '1em', border: '1px solid #ccc', borderRadius: '5px' }}
+        />
+        <input 
+          name="hora" 
+          type="time" 
+          value={form.hora} 
+          onChange={handleChange} 
+          required 
+          style={{ padding: '12px 10px', fontSize: '1em', border: '1px solid #ccc', borderRadius: '5px' }}
+        />
+        <input 
+          name="valor" 
+          type="number" 
+          placeholder="Value (USD)" 
+          value={form.valor} 
+          onChange={handleChange} 
+          required 
+          style={{ padding: '12px 10px', fontSize: '1em', border: '1px solid #ccc', borderRadius: '5px' }}
+        />
+        <input 
+          name="endereco" 
+          placeholder="Address or General Location" 
+          value={form.endereco} 
+          onChange={handleChange} 
+          required 
+          style={{ padding: '12px 10px', fontSize: '1em', border: '1px solid #ccc', borderRadius: '5px' }}
+        />
+        <button 
+          type="submit" 
+          disabled={loading} 
+          style={{
+            padding: '12px 20px', 
+            fontSize: '1.1em', 
+            backgroundColor: loading ? '#ccc' : '#28a745', 
+            color: 'white', 
+            border: 'none', 
+            borderRadius: '5px', 
+            cursor: 'pointer', 
+            marginTop: '10px'
+          }}
+        >
+          {loading ? 'Saving...' : 'Save'}
+        </button>
+        {success && <span style={{ color: '#28a745', marginLeft: '10px', fontSize: '1.05em', fontWeight: 'bold' }}>Saved successfully!</span>}
+      </div>
     </form>
   );
 }

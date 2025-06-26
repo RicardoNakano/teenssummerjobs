@@ -85,36 +85,64 @@ export default function AdminUsersPage() {
     }
   };
 
-  if (loading) return <div>Loading users...</div>;
-  if (isAdmin === false) return <div style={{ color: 'red' }}>Access denied. You are not an administrator.</div>;
-  if (error) return <div style={{ color: 'red' }}>{error}</div>;
+  if (loading) return <div style={{ padding: '20px', fontSize: '1.2em', textAlign: 'center' }}>Loading users...</div>;
+  if (isAdmin === false) return <div style={{ padding: '20px', fontSize: '1.2em', color: 'red', textAlign: 'center', fontWeight: 'bold' }}>Access Denied: You are not an administrator.</div>;
+  if (error) return <div style={{ padding: '20px', fontSize: '1.2em', color: 'red', textAlign: 'center' }}>{error}</div>;
 
   return (
-    <div style={{ maxWidth: 600, margin: '40px auto', border: '1px solid #ccc', padding: 24, borderRadius: 10 }}>
-      <h2>User Administration</h2>
-      <div style={{ marginBottom: 24 }}>
-        <b>SMS Validation:</b> {smsValidation ? 'Enabled' : 'Disabled'}
-        <button onClick={handleToggleSmsValidation} style={{ marginLeft: 16 }}>
-          {smsValidation ? 'Disable' : 'Enable'}
+    <div style={{ maxWidth: '800px', margin: '40px auto', border: '1px solid #ccc', padding: '30px', borderRadius: '10px', backgroundColor: '#f9f9f9' }}>
+      <h2 style={{ fontSize: '2em', color: '#2c3e50', marginBottom: '30px', textAlign: 'center', borderBottom: '2px solid #eee', paddingBottom: '15px' }}>User Administration</h2>
+      
+      <div style={{ marginBottom: '30px', padding: '15px', border: '1px solid #ddd', borderRadius: '8px', backgroundColor: '#fff' }}>
+        <b style={{ fontSize: '1.2em', color: '#34495e' }}>SMS Validation:</b> 
+        <span style={{ fontSize: '1.1em', marginLeft: '10px', fontWeight: smsValidation ? 'bold' : 'normal', color: smsValidation ? '#28a745' : '#dc3545'}}>
+          {smsValidation ? 'Enabled' : 'Disabled'}
+        </span>
+        <button 
+          onClick={handleToggleSmsValidation} 
+          style={{
+            marginLeft: '20px', 
+            padding: '10px 18px', 
+            fontSize: '1em', 
+            color: 'white', 
+            backgroundColor: smsValidation ? '#ffc107' : '#007bff', 
+            border: 'none', 
+            borderRadius: '5px', 
+            cursor: 'pointer'
+          }}
+        >
+          {smsValidation ? 'Disable SMS Validation' : 'Enable SMS Validation'}
         </button>
       </div>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
+
+      <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '0 10px' }}>
+        <thead style={{ backgroundColor: '#e9ecef' }}>
           <tr>
-            <th>Name</th>
-            <th>Phone</th>
-            <th>Admin</th>
-            <th>Action</th>
+            <th style={{ padding: '15px', textAlign: 'left', fontSize: '1.1em', color: '#495057' }}>Name</th>
+            <th style={{ padding: '15px', textAlign: 'left', fontSize: '1.1em', color: '#495057' }}>Phone</th>
+            <th style={{ padding: '15px', textAlign: 'left', fontSize: '1.1em', color: '#495057' }}>Admin</th>
+            <th style={{ padding: '15px', textAlign: 'left', fontSize: '1.1em', color: '#495057' }}>Action</th>
           </tr>
         </thead>
         <tbody>
           {users.map(u => (
-            <tr key={u.uid} style={{ borderBottom: '1px solid #eee' }}>
-              <td>{u.displayName}</td>
-              <td>{u.phone}</td>
-              <td>{u.admin ? 'Yes' : 'No'}</td>
-              <td>
-                <button onClick={() => handleToggleAdmin(u.uid, u.admin || false)}>
+            <tr key={u.uid} style={{ backgroundColor: '#fff', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+              <td style={{ padding: '15px', fontSize: '1.05em' }}>{u.displayName}</td>
+              <td style={{ padding: '15px', fontSize: '1.05em' }}>{u.phone || '-'}</td>
+              <td style={{ padding: '15px', fontSize: '1.05em', color: u.admin ? '#28a745' : '#6c757d', fontWeight: 'bold' }}>{u.admin ? 'Yes' : 'No'}</td>
+              <td style={{ padding: '15px' }}>
+                <button 
+                  onClick={() => handleToggleAdmin(u.uid, u.admin || false)} 
+                  style={{
+                    padding: '10px 15px', 
+                    fontSize: '1em', 
+                    color: 'white', 
+                    backgroundColor: u.admin ? '#dc3545' : '#28a745', 
+                    border: 'none', 
+                    borderRadius: '5px', 
+                    cursor: 'pointer'
+                  }}
+                >
                   {u.admin ? 'Remove Admin' : 'Make Admin'}
                 </button>
               </td>
