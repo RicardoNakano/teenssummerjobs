@@ -93,26 +93,6 @@ export default function ProfileDetails() {
     setSubmitting(false);
   };
 
-  const handleSaveReviewUrl = async () => {
-    setSubmitting(true);
-    setSuccessMsg('');
-    setRatingError('');
-    try {
-      if (!userId) throw new Error('No userId');
-      await import('firebase/firestore').then(firestore =>
-        firestore.setDoc(
-          firestore.doc(db, 'users/' + userId),
-          { reviewUrl },
-          { merge: true }
-        )
-      );
-      setSuccessMsg('Review video URL saved!');
-    } catch {
-      setRatingError('Error saving review video URL.');
-    }
-    setSubmitting(false);
-  };
-
   const handleDeleteReview = async (reviewIdx: number) => {
     if (!currentUser || !userId) return;
     setSubmitting(true);
