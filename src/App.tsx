@@ -13,6 +13,8 @@ import AdminUsersPage from './AdminUsersPage';
 import ProfileDetails from './ProfileDetails';
 
 function MainApp({ user, handleLogout, handleRefresh, refresh, handleLogin }: any) {
+  const [showProfileSettings, setShowProfileSettings] = useState(false);
+
   return (
     <div className="container" style={{ padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
       <header style={{ textAlign: 'center', marginBottom: '40px' }}>
@@ -30,9 +32,29 @@ function MainApp({ user, handleLogout, handleRefresh, refresh, handleLogin }: an
               Logout
             </button>
           </div>
-          <section style={{ marginBottom: '40px' }}>
-            <ProfileConfig onSaved={handleRefresh} />
+          
+          <section style={{ marginBottom: '30px' }}>
+            <button 
+              onClick={() => setShowProfileSettings(!showProfileSettings)}
+              style={{
+                width: '100%',
+                padding: '12px',
+                fontSize: '1.2em',
+                backgroundColor: '#6c757d',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                marginBottom: showProfileSettings ? '20px' : '0'
+              }}
+            >
+              {showProfileSettings ? 'Hide Profile Settings' : 'Show Profile Settings'}
+            </button>
+            {showProfileSettings && (
+              <ProfileConfig onSaved={() => { handleRefresh(); setShowProfileSettings(false); }} />
+            )}
           </section>
+
           <section style={{ marginBottom: '40px' }}>
             <ServiceForm type="oferta" onSaved={handleRefresh} />
           </section>
