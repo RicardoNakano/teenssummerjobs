@@ -16,8 +16,8 @@ function MainApp({ user, handleLogout, handleRefresh, refresh, handleLogin }: an
   return (
     <div className="container" style={{ padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
       <header style={{ textAlign: 'center', marginBottom: '40px' }}>
-        <h1 style={{ fontSize: '2.5em', color: '#333', marginBottom: '10px' }}>Teens Summer Jobs</h1>
-        <p style={{ fontSize: '1.1em', color: '#555' }}>Centralize offers and requests for teen services in the US for the summer.</p>
+        <h1 style={{ fontSize: '2.5em', color: '#FAFAFA', marginBottom: '10px' }}>Teens Summer Jobs</h1>
+        <p style={{ fontSize: '1.1em', color: '#E0E0E0' }}>Centralize offers and requests for teen services in the US for the summer.</p>
       </header>
       {user ? (
         <div style={{ marginBottom: '30px' }}>

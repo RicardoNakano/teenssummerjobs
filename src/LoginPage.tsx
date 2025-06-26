@@ -35,7 +35,7 @@ export default function LoginPage() {
       backgroundColor: '#f9f9f9'
     }}>
       <h2 style={{ fontSize: '2em', color: '#333', marginBottom: '15px' }}>Login</h2>
-      <p style={{ fontSize: '1.15em', color: '#555', marginBottom: '30px', lineHeight: '1.6' }}>
+      <p style={{ fontSize: '1.15em', color: '#444', marginBottom: '30px', lineHeight: '1.6' }}>
         Access the platform to find or offer services.
       </p>
       <button 
