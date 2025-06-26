@@ -61,8 +61,8 @@ export default function ProfileConfig({ onSaved }: { onSaved?: () => void }) {
   };
 
   return (
-    <div style={{ border: '1px solid #ccc', padding: '25px', borderRadius: '8px', marginBottom: '30px', maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto', backgroundColor: '#f9f9f9', color: '#333' }}>
-      <h2 style={{ textAlign: 'center', marginBottom: '30px', fontSize: '1.8em', color: '#2c3e50' }}>Profile Settings</h2>
+    <div style={{ border: '1px solid rgba(204, 204, 204, 0.2)', padding: '25px', borderRadius: '8px', marginBottom: '30px', maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto', backgroundColor: 'rgba(40, 40, 40, 0.8)', color: '#FAFAFA' }}>
+      <h2 style={{ textAlign: 'center', marginBottom: '30px', fontSize: '1.8em', color: '#FAFAFA' }}>Profile Settings</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         <label style={{ fontSize: '1.1em' }}>
           Display name:
@@ -70,7 +70,7 @@ export default function ProfileConfig({ onSaved }: { onSaved?: () => void }) {
             value={displayName} 
             onChange={e => setDisplayName(e.target.value)} 
             placeholder="Your Name" 
-            style={{ width: 'calc(100% - 22px)', marginTop: '8px', padding: '12px 10px', fontSize: '1em', borderRadius: '5px', border: '1px solid #ccc' }} 
+            style={{ width: 'calc(100% - 22px)', marginTop: '8px', padding: '12px 10px', fontSize: '1em', borderRadius: '5px', border: '1px solid rgba(204, 204, 204, 0.3)', backgroundColor: 'rgba(255, 255, 255, 0.1)', color: '#FFF' }} 
           />
         </label>
         <label style={{ fontSize: '1.1em' }}>
@@ -79,7 +79,7 @@ export default function ProfileConfig({ onSaved }: { onSaved?: () => void }) {
             value={videoUrl} 
             onChange={e => setVideoUrl(e.target.value)} 
             placeholder="https://youtube.com/watch?v=..." 
-            style={{ width: 'calc(100% - 22px)', marginTop: '8px', padding: '12px 10px', fontSize: '1em', borderRadius: '5px', border: '1px solid #ccc' }} 
+            style={{ width: 'calc(100% - 22px)', marginTop: '8px', padding: '12px 10px', fontSize: '1em', borderRadius: '5px', border: '1px solid rgba(204, 204, 204, 0.3)', backgroundColor: 'rgba(255, 255, 255, 0.1)', color: '#FFF' }} 
           />
         </label>
         <label style={{ fontSize: '1.1em' }}>
@@ -88,7 +88,7 @@ export default function ProfileConfig({ onSaved }: { onSaved?: () => void }) {
             value={phone} 
             placeholder="+15551234567" 
             disabled 
-            style={{ width: 'calc(100% - 22px)', marginTop: '8px', padding: '12px 10px', fontSize: '1em', borderRadius: '5px', border: '1px solid #ccc', backgroundColor: '#e9ecef' }} 
+            style={{ width: 'calc(100% - 22px)', marginTop: '8px', padding: '12px 10px', fontSize: '1em', borderRadius: '5px', border: '1px solid rgba(204, 204, 204, 0.3)', backgroundColor: 'rgba(233, 236, 239, 0.2)', color: '#ccc' }} 
           />
         </label>
         <button 
@@ -200,14 +200,14 @@ function PhoneRegisterPageInline({ onClose }: { onClose: () => void }) {
   if (!user) return null;
 
   return (
-    <div style={{ maxWidth: '450px', margin: '0 auto', border: '1px solid #ddd', padding: '25px', borderRadius: '8px', backgroundColor: '#fff' }}>
-      <h3 style={{ textAlign: 'center', marginBottom: '25px', fontSize: '1.5em', color: '#2c3e50' }}>Register/Change Phone</h3>
+    <div style={{ maxWidth: '450px', margin: '0 auto', border: '1px solid rgba(221, 221, 221, 0.3)', padding: '25px', borderRadius: '8px', backgroundColor: 'rgba(50, 50, 50, 0.9)' }}>
+      <h3 style={{ textAlign: 'center', marginBottom: '25px', fontSize: '1.5em', color: '#FAFAFA' }}>Register/Change Phone</h3>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
         <input 
           value={phone} 
           onChange={e => setPhone(e.target.value)} 
           placeholder="+15551234567" 
-          style={{ width: 'calc(100% - 22px)', padding: '12px 10px', fontSize: '1em', borderRadius: '5px', border: '1px solid #ccc' }} 
+          style={{ width: 'calc(100% - 22px)', padding: '12px 10px', fontSize: '1em', borderRadius: '5px', border: '1px solid rgba(204, 204, 204, 0.3)', backgroundColor: 'rgba(255, 255, 255, 0.1)', color: '#FFF' }} 
         />
         <div id={recaptchaId}></div>
         {smsValidation ? (
@@ -225,7 +225,7 @@ function PhoneRegisterPageInline({ onClose }: { onClose: () => void }) {
                 value={smsCode} 
                 onChange={e => setSmsCode(e.target.value)} 
                 placeholder="SMS Code" 
-                style={{ width: 'calc(100% - 22px)', padding: '12px 10px', fontSize: '1em', borderRadius: '5px', border: '1px solid #ccc' }} 
+                style={{ width: 'calc(100% - 22px)', padding: '12px 10px', fontSize: '1em', borderRadius: '5px', border: '1px solid rgba(204, 204, 204, 0.3)', backgroundColor: 'rgba(255, 255, 255, 0.1)', color: '#FFF' }} 
               />
               <button 
                 onClick={handleVerifySMS} 

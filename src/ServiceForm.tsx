@@ -65,12 +65,12 @@ export default function ServiceForm({ type, onSaved }: ServiceFormProps) {
       style={{
         marginBottom: '40px', 
         padding: '25px', 
-        border: '1px solid #e0e0e0', 
+        border: '1px solid rgba(224, 224, 224, 0.2)', 
         borderRadius: '8px', 
-        backgroundColor: '#f9f9f9'
+        backgroundColor: 'rgba(40, 40, 40, 0.8)'
       }}
     >
-      <h2 style={{ fontSize: '1.8em', color: '#333', marginBottom: '25px', borderBottom: '2px solid #eee', paddingBottom: '10px' }}>
+      <h2 style={{ fontSize: '1.8em', color: '#FAFAFA', marginBottom: '25px', borderBottom: '2px solid rgba(238, 238, 238, 0.1)', paddingBottom: '10px' }}>
         {type === 'oferta' ? 'Offer Service' : 'Request Service'}
       </h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
@@ -80,7 +80,7 @@ export default function ServiceForm({ type, onSaved }: ServiceFormProps) {
           value={form.servico} 
           onChange={handleChange} 
           required 
-          style={{ padding: '12px 10px', fontSize: '1em', border: '1px solid #ccc', borderRadius: '5px' }}
+          style={{ padding: '12px 10px', fontSize: '1em', border: '1px solid rgba(204, 204, 204, 0.3)', borderRadius: '5px', backgroundColor: 'rgba(255, 255, 255, 0.1)', color: '#FFF' }}
         />
         <input 
           name="data" 
@@ -88,7 +88,7 @@ export default function ServiceForm({ type, onSaved }: ServiceFormProps) {
           value={form.data} 
           onChange={handleChange} 
           required 
-          style={{ padding: '12px 10px', fontSize: '1em', border: '1px solid #ccc', borderRadius: '5px' }}
+          style={{ padding: '12px 10px', fontSize: '1em', border: '1px solid rgba(204, 204, 204, 0.3)', borderRadius: '5px', backgroundColor: 'rgba(255, 255, 255, 0.1)', color: '#FFF' }}
         />
         <input 
           name="hora" 
@@ -96,7 +96,7 @@ export default function ServiceForm({ type, onSaved }: ServiceFormProps) {
           value={form.hora} 
           onChange={handleChange} 
           required 
-          style={{ padding: '12px 10px', fontSize: '1em', border: '1px solid #ccc', borderRadius: '5px' }}
+          style={{ padding: '12px 10px', fontSize: '1em', border: '1px solid rgba(204, 204, 204, 0.3)', borderRadius: '5px', backgroundColor: 'rgba(255, 255, 255, 0.1)', color: '#FFF' }}
         />
         <input 
           name="valor" 
@@ -105,7 +105,7 @@ export default function ServiceForm({ type, onSaved }: ServiceFormProps) {
           value={form.valor} 
           onChange={handleChange} 
           required 
-          style={{ padding: '12px 10px', fontSize: '1em', border: '1px solid #ccc', borderRadius: '5px' }}
+          style={{ padding: '12px 10px', fontSize: '1em', border: '1px solid rgba(204, 204, 204, 0.3)', borderRadius: '5px', backgroundColor: 'rgba(255, 255, 255, 0.1)', color: '#FFF' }}
         />
         <input 
           name="endereco" 
@@ -113,7 +113,7 @@ export default function ServiceForm({ type, onSaved }: ServiceFormProps) {
           value={form.endereco} 
           onChange={handleChange} 
           required 
-          style={{ padding: '12px 10px', fontSize: '1em', border: '1px solid #ccc', borderRadius: '5px' }}
+          style={{ padding: '12px 10px', fontSize: '1em', border: '1px solid rgba(204, 204, 204, 0.3)', borderRadius: '5px', backgroundColor: 'rgba(255, 255, 255, 0.1)', color: '#FFF' }}
         />
         <button 
           type="submit" 
