@@ -27,14 +27,23 @@ export default function ServiceList({ type }: ServiceListProps) {
   const [items, setItems] = useState<ServiceItem[]>([]);
   const [user] = useAuthState(auth);
   const [filter, setFilter] = useState('');
+  const [fetchError, setFetchError] = useState(''); // Para mostrar erros de conexão
 
   useEffect(() => {
     const q = query(collection(db, type), orderBy('timestamp', 'desc'));
-    const unsub = onSnapshot(q, (snapshot) => {
-      setItems(
-        snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as ServiceItem[]
-      );
-    });
+    // Adicionado tratamento de erro ao listener
+    const unsub = onSnapshot(q, 
+      (snapshot) => {
+        setFetchError(''); // Limpa o erro se a conexão for bem-sucedida
+        setItems(
+          snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as ServiceItem[]
+        );
+      },
+      (error) => {
+        console.error(`Firestore listener for ${type} failed:`, error);
+        setFetchError('Could not load real-time data. Please check your connection and refresh the page.');
+      }
+    );
     return () => unsub();
   }, [type]);
 
@@ -73,6 +82,7 @@ export default function ServiceList({ type }: ServiceListProps) {
       <h2 style={{ fontSize: '1.8em', color: '#333', marginBottom: '20px', borderBottom: '2px solid #eee', paddingBottom: '10px' }}>
         {type === 'ofertas' ? 'Service Offers' : 'Service Requests'}
       </h2>
+      {fetchError && <p style={{ color: 'red', fontWeight: 'bold', padding: '10px', border: '1px solid red', borderRadius: '5px' }}>{fetchError}</p>}
       <input
         type="text"
         placeholder="Filter by service name..."
@@ -115,7 +125,10 @@ export default function ServiceList({ type }: ServiceListProps) {
                     <Link to={`/profile/${item.userId}`} style={{ color: '#007bff', textDecoration: 'underline', fontWeight: 'bold' }}>
                       {item.userName}
                     </Link>
-                    {item.userPhone ? ` | Phone: ${item.userPhone}` : ''}
+                    {/* Telefone agora é um link "tel:" */}
+                    {item.userPhone ? 
+                      <span style={{ whiteSpace: 'nowrap' }}> | Phone: <a href={`tel:${item.userPhone}`} style={{ color: '#007bff' }}>{item.userPhone}</a></span> 
+                      : ''}
                     {item.userId && userRatings[item.userId as string] !== undefined && (
                       <span style={{ marginLeft: '12px', display: 'inline-flex', alignItems: 'center' }}>
                         {[1,2,3,4,5].map(i => (
