@@ -30,14 +30,10 @@ const AdBanner: React.FC = () => {
       alignItems: 'center',
       justifyContent: 'center'
     }}>
-      {/* 
-        O ID do cliente já foi adicionado.
-        Agora, substitua 'YOUR_AD_SLOT_ID' pelo ID do bloco de anúncios que você acabou de criar no AdSense.
-      */}
       <ins className="adsbygoogle"
-           style={{ display: 'block', width: '320px', height: '50px' }}
-           data-ad-client="ca-pub-5138549414459170" // SEU ID DE CLIENTE (JÁ INSERIDO)
-           data-ad-slot="YOUR_AD_SLOT_ID"          // COLE O SEU ID DE BLOCO DE ANÚNCIO AQUI
+           style={{ display: 'block', width: '100%' }} // Estilo ajustado para responsividade
+           data-ad-client="ca-pub-5138549414459170" // Seu ID de cliente
+           data-ad-slot="7561598071"               // Seu ID de bloco de anúncio (atualizado)
            data-ad-format="auto"
            data-full-width-responsive="true">
       </ins>
