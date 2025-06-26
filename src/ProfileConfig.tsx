@@ -18,6 +18,7 @@ export default function ProfileConfig({ onSaved }: { onSaved?: () => void }) {
   const [user] = useAuthState(auth);
   const [displayName, setDisplayName] = useState(user?.displayName || '');
   const [phone, setPhone] = useState('');
+  const [videoUrl, setVideoUrl] = useState('');
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const [showPhoneRegister, setShowPhoneRegister] = useState(false);
@@ -27,18 +28,20 @@ export default function ProfileConfig({ onSaved }: { onSaved?: () => void }) {
     if (!user) {
       navigate('/login');
     } else {
-      // Busca sempre o nome atualizado do Firestore
+      // Always fetch the latest name, phone, and videoUrl from Firestore
       getDoc(doc(db, 'users', user.uid)).then((snap) => {
         if (snap.exists()) {
           const data = snap.data();
           setPhone(data.phone || '');
-          // Se displayName não existe ou é vazio, mostra string vazia
+          setVideoUrl(data.videoUrl || '');
           setDisplayName((data.displayName !== undefined && data.displayName !== null) ? String(data.displayName) : '');
         } else {
           setDisplayName('');
+          setVideoUrl('');
         }
       }).catch(() => {
         setDisplayName('');
+        setVideoUrl('');
       });
     }
   }, [user, navigate, success]);
@@ -46,31 +49,41 @@ export default function ProfileConfig({ onSaved }: { onSaved?: () => void }) {
   const handleSave = async () => {
     setError('');
     try {
-      await setDoc(doc(db, 'users', user!.uid), { displayName, phone }, { merge: true });
+      await setDoc(doc(db, 'users', user!.uid), { displayName, phone, videoUrl }, { merge: true });
       await updateProfile(user as User, { displayName });
       setSuccess(true);
       if (onSaved) onSaved();
     } catch (err) {
-      setError('Erro ao salvar.');
+      setError('Error saving.');
     }
   };
 
   return (
-    <div style={{ border: '1px solid #ccc', padding: 16, borderRadius: 8, marginBottom: 24 }}>
-      <h2>Profile Settings</h2>
-      <label>Display name:</label>
-      <input value={displayName} onChange={e => setDisplayName(e.target.value)} placeholder="Name" />
-      <button onClick={handleSave} style={{ marginLeft: 8, marginBottom: 8 }}>Save Name</button>
-      <label>Phone (+1...):</label>
-      <input value={phone} placeholder="+15551234567" disabled />
-      <button onClick={() => setShowPhoneRegister(v => !v)} style={{ marginLeft: 8 }}>Register/Change Phone</button>
-      {showPhoneRegister && (
-        <div style={{ marginTop: 24 }}>
-          <PhoneRegisterPageInline onClose={() => setShowPhoneRegister(false)} />
-        </div>
-      )}
-      {success && <span style={{ color: 'green', marginLeft: 8 }}>Saved!</span>}
-      {error && <span style={{ color: 'red', marginLeft: 8 }}>{error}</span>}
+    <div style={{ border: '1px solid #ccc', padding: 24, borderRadius: 8, marginBottom: 24, maxWidth: 400, marginLeft: 'auto', marginRight: 'auto', background: '#222', color: '#fff' }}>
+      <h2 style={{ textAlign: 'center', marginBottom: 24 }}>Profile Settings</h2>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <label>
+          Display name:
+          <input value={displayName} onChange={e => setDisplayName(e.target.value)} placeholder="Name" style={{ width: '100%', marginTop: 4 }} />
+        </label>
+        <label>
+          Presentation video URL:
+          <input value={videoUrl} onChange={e => setVideoUrl(e.target.value)} placeholder="https://..." style={{ width: '100%', marginTop: 4 }} />
+        </label>
+        <label>
+          Phone (+1...):
+          <input value={phone} placeholder="+15551234567" disabled style={{ width: '100%', marginTop: 4 }} />
+        </label>
+        <button onClick={() => setShowPhoneRegister(v => !v)} style={{ width: '100%' }}>Register/Change Phone</button>
+        <button onClick={handleSave} style={{ width: '100%', fontWeight: 'bold', marginTop: 8 }}>Save Profile</button>
+        {showPhoneRegister && (
+          <div style={{ marginTop: 24 }}>
+            <PhoneRegisterPageInline onClose={() => setShowPhoneRegister(false)} />
+          </div>
+        )}
+        {success && <span style={{ color: 'lightgreen', marginLeft: 8 }}>Saved!</span>}
+        {error && <span style={{ color: 'red', marginLeft: 8 }}>{error}</span>}
+      </div>
     </div>
   );
 }

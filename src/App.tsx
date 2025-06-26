@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import PhoneRegisterPage from './PhoneRegisterPage';
 import LoginPage from './LoginPage';
 import AdminUsersPage from './AdminUsersPage';
+import ProfileDetails from './ProfileDetails';
 
 function MainApp({ user, handleLogout, handleRefresh, refresh, handleLogin }: any) {
   return (
@@ -73,6 +74,7 @@ function App() {
         <Routes>
           <Route path="/registrar-telefone" element={<PhoneRegisterPage />} />
           <Route path="/adminuserspage" element={<AdminUsersPage />} />
+          <Route path="/profile/:userId" element={<ProfileDetails />} />
           {/* Outras rotas do app aqui */}
         </Routes>
       )}
