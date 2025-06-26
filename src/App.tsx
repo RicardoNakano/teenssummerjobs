@@ -11,6 +11,7 @@ import PhoneRegisterPage from './PhoneRegisterPage';
 import LoginPage from './LoginPage';
 import AdminUsersPage from './AdminUsersPage';
 import ProfileDetails from './ProfileDetails';
+//import AdBanner from './AdBanner'; // Importe o AdBanner
 
 function MainApp({ user, handleLogout, handleRefresh, refresh, handleLogin }: any) {
   const [showProfileSettings, setShowProfileSettings] = useState(false);
@@ -107,7 +108,7 @@ function App() {
 
   return (
     <>
-      {/* Sempre mostra MainApp na rota /perfil ou / */}
+      {/* Conteúdo principal baseado na rota */}
       {(location.pathname === '/perfil' || location.pathname === '/') ? (
         <MainApp
           user={user}
@@ -126,6 +127,10 @@ function App() {
           {/* Outras rotas do app aqui */}
         </Routes>
       )}
+      {/* AdBanner será renderizado aqui, em todas as páginas */}
+      {/* Considere adicionar lógica para mostrar o AdBanner apenas se aprovado/configurado */}
+      {/* <AdBanner /> */}
+      {/* Descomente a linha acima QUANDO você tiver configurado seus IDs no AdBanner.tsx e quiser testar */}
     </>
   );
 }
@@ -134,6 +139,10 @@ export default function AppWithRouter() {
   return (
     <Router>
       <App />
+      {/* Renderize o AdBanner aqui para que ele fique fora do componente App que depende da localização */}
+      {/* Isso garante que ele seja renderizado uma vez e permaneça fixo */}
+      {/* Lembre-se de configurar seus IDs no AdBanner.tsx antes de descomentar! */}
+      {/* <AdBanner /> */}
     </Router>
   );
 }

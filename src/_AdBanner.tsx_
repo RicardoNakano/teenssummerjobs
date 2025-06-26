@@ -1,0 +1,52 @@
+import React, { useEffect } from 'react';
+
+declare global {
+  interface Window {
+    adsbygoogle?: any[];
+  }
+}
+
+const AdBanner: React.FC = () => {
+  useEffect(() => {
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {
+      console.error('AdSense Error:', e);
+    }
+  }, []);
+
+  return (
+    <div style={{
+      position: 'fixed',
+      bottom: 0,
+      left: 0,
+      width: '100%',
+      backgroundColor: '#f1f1f1', // Cor de fundo para o container do anúncio
+      textAlign: 'center',
+      zIndex: 10000, // Z-index alto para garantir que fique por cima
+      borderTop: '1px solid #e0e0e0',
+      padding: '5px 0', // Pequeno padding, ajuste conforme necessário
+      minHeight: '50px', // Altura mínima, pode ser ajustada pelo anúncio
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+      {/* 
+        Substitua 'YOUR_ADSENSE_CLIENT_ID' pelo seu ID de editor (ex: ca-pub-XXXXXXXXXXXXXXXX)
+        Substitua 'YOUR_AD_SLOT_ID' pelo ID do seu bloco de anúncios de display.
+        Ajuste o estilo (width, height) conforme as dimensões do seu bloco de anúncios.
+        Para um banner de rodapé responsivo, você pode usar data-full-width-responsive="true"
+        e definir uma altura fixa ou deixar o AdSense otimizar.
+      */}
+      <ins className="adsbygoogle"
+           style={{ display: 'block', width: '320px', height: '50px' }} // Exemplo: tamanho comum para banner mobile
+           data-ad-client="ca-pub-5138549414459170" // SEU ID DE CLIENTE ADSENSE AQUI
+           data-ad-slot="YOUR_AD_SLOT_ID"          // SEU ID DE BLOCO DE ANÚNCIO AQUI
+           data-full-width-responsive="false">
+      </ins>
+      {/* <span style={{fontSize: '10px', color: '#777', marginLeft: '10px'}}>Advertisement</span> */}
+    </div>
+  );
+};
+
+export default AdBanner;
