@@ -11,7 +11,6 @@ export default function ProfileDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [currentUser] = useAuthState(auth);
-  const [reviewUrl, setReviewUrl] = useState('');
   const [ratings, setRatings] = useState<{stars: number, reviewer: string, reviewerId: string, comment?: string, videoUrl?: string, deleted?: boolean, replyText?: string, replyVideoUrl?: string}[]>([]);
   const [myRating, setMyRating] = useState<number>(0);
   const [myComment, setMyComment] = useState('');
@@ -29,7 +28,6 @@ export default function ProfileDetails() {
       if (snap.exists()) {
         const data = snap.data();
         setProfile(data);
-        setReviewUrl(data.reviewUrl || '');
       } else {
         setError('Profile not found.');
       }
